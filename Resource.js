@@ -206,6 +206,11 @@ module.exports = function(app, route, modelName, model) {
         methodOptions.after = options['after' + method];
       }
 
+
+      if((method==='Virtual')&&(options.path)){
+          methodOptions.path=options.path
+      }
+
       // Expose mongoose hooks for each method.
       _.each(['before', 'after'], function(type) {
         var path = 'hooks.' + method.toString().toLowerCase() + '.' + type;
@@ -496,7 +501,7 @@ module.exports = function(app, route, modelName, model) {
      */
     virtual: function(options) {
 
-      console.log('Loaded from xialer/resourcejs forked from travist/resourcejs for cheersun')
+      //console.log('Loaded from xialer/resourcejs forked from travist/resourcejs for cheersun')
 
 
       options = this.getMethodOptions('virtual', options);
