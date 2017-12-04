@@ -237,6 +237,7 @@ module.exports = function(app, route, modelName, model) {
         .index(options)
         .get(options)
         .virtual(options)
+        .virtual_post(options)
         .put(options)
         .patch(options)
         .post(options)
@@ -500,10 +501,7 @@ module.exports = function(app, route, modelName, model) {
      * derived from this resource
      */
     virtual: function(options) {
-
       //console.log('Loaded from xialer/resourcejs forked from travist/resourcejs for cheersun')
-
-
       options = this.getMethodOptions('virtual', options);
       this.methods.push('virtual');
       var path = (options.path === undefined) ? this.path : options.path;
@@ -520,6 +518,28 @@ module.exports = function(app, route, modelName, model) {
         }.bind(this));
       }, this.respond.bind(this), options);
       return this;
+    },
+    /**
+     * Virtual (POST) method. Returns a user-defined projection (typically an aggregate result)
+     * derived from this resource
+     */
+    virtual_post: function(options) {
+        //console.log('Loaded from xialer/resourcejs forked from travist/resourcejs for cheersun')
+        options = this.getMethodOptions('virtual', options);
+        this.methods.push('virtual');
+        var path = (options.path === undefined) ? this.path : options.path;
+        this.register(app, 'post', this.route + '/virtual/' + path, function(req, res, next) {
+            // Store the internal method for response manipulation.
+            req.__rMethod = 'virtual';
+            if (req.skipResource) { return next(); }
+            var query = req.modelQuery;
+            query.exec(function(err, item) {
+                if (err) return this.setResponse(res, {status: 500, error: err}, next);
+                if (!item) return this.setResponse(res, {status: 404}, next);
+                return this.setResponse(res, {status: 200, item: item}, next);
+            }.bind(this));
+        }, this.respond.bind(this), options);
+        return this;
     },
 
     /**
