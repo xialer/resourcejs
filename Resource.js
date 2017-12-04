@@ -495,6 +495,10 @@ module.exports = function(app, route, modelName, model) {
      * derived from this resource
      */
     virtual: function(options) {
+
+      console.log('Loaded from xialer/resourcejs forked from travist/resourcejs for cheersun')
+
+
       options = this.getMethodOptions('virtual', options);
       this.methods.push('virtual');
       var path = (options.path === undefined) ? this.path : options.path;
