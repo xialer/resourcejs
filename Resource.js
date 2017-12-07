@@ -566,25 +566,21 @@ module.exports = function (app, route, modelName, model) {
                 }
 
                 if (_.isEmpty(req.body)) {
+                    var item ={}
+                    var outer=this
                     options.hooks.post.before.call(this, req, res, req.body, function () {
-                            // 预计执行完 before 之后的处理方法
-                            var item = {}
-                            // 将结果传递回来
-                            if (req.beforeResult) {
-                                item = req.beforeResult
-                            }
-                            return options.hooks.post.after.call(this, req, res, item, function () {
-                                    // 首先,清除掉beforeResult
-                                    delete req.beforeResult
-                                    if (req.afterResult) {
-                                        item = req.afterResult
-                                    }
-                                    // 预计执行完 after 之后的处理方法
-                                    return this.setResponse(res, {status: 201, item: item}, next)
-                                }
-                            )
+                        // 预计执行完 before 之后的处理方法
+                        // 将结果传递回来
+                        if (req.beforeResult) {
+                            item =_.cloneDeep(req.beforeResult)
                         }
-                    )
+                        console.log('调用 before 方法之后');
+                        return options.hooks.post.after.call(this, req, res, item,
+                            function(){
+                                console.log('调用 after 方法之前');
+                                return outer.setResponse(res, {status: 201, item: item}, next)
+                            })
+                    })
                 } else {
                     options.hooks.post.before.call(
                         this,
