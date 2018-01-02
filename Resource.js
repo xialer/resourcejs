@@ -167,8 +167,11 @@ module.exports = function (app, route, modelName, model) {
                         break;
                 }
             }
+          // 如果不继续回调的话,看似就没有问题了
+          // 下一个回调是下一个中间件的事情,什么情况下会调用下面的参数呢???
+          // 已经确认,下面的参数是 nuxt 所以下面的调用取消掉
 
-            next();
+          // next();
         },
 
         /**
