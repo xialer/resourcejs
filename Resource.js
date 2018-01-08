@@ -220,6 +220,12 @@ module.exports = function(app, route, modelName, model) {
         methodOptions.after = options['after' + method];
       }
 
+      // 重新修复 Virtual 方法不能用的 BUG
+
+      if ((method === 'Virtual') && (options.path)) {
+        methodOptions.path = options.path
+      }
+
       // Expose mongoose hooks for each method.
       _.each(['before', 'after'], function(type) {
         var path = 'hooks.' + method.toString().toLowerCase() + '.' + type;
