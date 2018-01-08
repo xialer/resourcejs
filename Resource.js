@@ -168,7 +168,8 @@ module.exports = function(app, route, modelName, model) {
         }
       }
 
-      next();
+      // 返回后不进行提交,避免 nuxt 重复处理导致的问题
+      // next();
     },
 
     /**
@@ -245,6 +246,7 @@ module.exports = function(app, route, modelName, model) {
         .index(options)
         .get(options)
         .virtual(options)
+        .virtual_post(options)
         .put(options)
         .patch(options)
         .post(options)
