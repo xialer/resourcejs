@@ -415,6 +415,11 @@ module.exports = function(app, route, modelName, model) {
             return (isNaN(value) || (value < 0)) ? defaults[key] : value;
           });
 
+          // 如果为 0 则返回所有
+          if(reqQuery.limit === 0){
+            reqQuery.limit = count
+          }
+
           // If a skip is provided, then set the range headers.
           if (reqQuery.skip && !req.headers.range) {
             req.headers['range-unit'] = 'items';
